@@ -1,6 +1,10 @@
 <template>
     <div class="app-container">
-        <mt-header fixed title="view商城"></mt-header>
+        <mt-header fixed title="view商城">
+            <a href="#" slot="left" @click.prevent="goBack" v-show="flag">
+                <mt-button icon="back">返回</mt-button>
+            </a>
+        </mt-header>
         <transition>
             <router-view></router-view>
         </transition>
@@ -10,7 +14,38 @@
 
 <script>
     export default {
-        name: 'app'
+        name: 'app',
+        data () {
+            return {
+                flag: true
+            }
+        },
+        created () {
+            this.getRouterPath()
+        },
+        watch: {
+            '$route.path': {
+                handler (val) {
+                    if (val == '/home') {
+                        this.flag = false
+                    } else {
+                        this.flag = true
+                    }
+                }
+            }
+        },
+        methods: {
+            goBack () {
+                this.$router.go(-1);
+            },
+            getRouterPath () {
+                if (this.$route.path == '/home') {
+                    this.flag = false
+                } else {
+                    this.flag = true
+                }
+            }
+        }
     }
 </script>
 

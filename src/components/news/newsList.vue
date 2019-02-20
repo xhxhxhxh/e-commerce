@@ -29,7 +29,7 @@
         methods: {
             getNewsList () {
                 this.$http.get('api/getnewslist').then(result => {
-                    console.log(result);
+                    // console.log(result);
                     if (result.body.status === 0) {
                         this.newsList = result.body.message;
                     } else {

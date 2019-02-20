@@ -21,5 +21,7 @@
 </script>
 
 <style scoped>
-
+.GoodsComments_container {
+    padding: 5px;
+}
 </style>

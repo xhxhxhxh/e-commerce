@@ -9,7 +9,7 @@
             <span class="mui-tab-label">会员</span>
         </router-link>
         <router-link class="my-mui-tab-item" to="/shoppingCart">
-            <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="endPosition">0</span></span>
+            <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="endPosition">{{ $store.getters.cartTotalCount }}</span></span>
             <span class="mui-tab-label">购物车</span>
         </router-link>
         <router-link class="my-mui-tab-item" to="/search">

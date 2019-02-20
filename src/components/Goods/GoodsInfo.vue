@@ -24,15 +24,15 @@
             <div class="mui-card-content">
                 <p>市场价格：<del>&yen;{{ GoodsInfo.market_price }}</del>&nbsp;&nbsp;销售价：<span class="price">&yen;{{ GoodsInfo.sell_price }}</span></p>
                 <span>购买数量：</span>
-                <div class="mui-numbox" data-numbox-min="1" :data-numbox-max="GoodsInfo.stock_quantity">
-                    <button class="mui-btn mui-btn-numbox-minus" type="button" @click="count--">-</button>
+                <div class="mui-numbox" data-numbox-min="1" >
+                    <button class="mui-btn mui-btn-numbox-minus" type="button" @tap="count--">-</button>
                     <input id="test" class="mui-input-numbox" type="number" v-model="count">
-                    <button class="mui-btn mui-btn-numbox-plus" type="button" @click="count++">+</button>
+                    <button class="mui-btn mui-btn-numbox-plus" type="button" @tap="count++">+</button>
                 </div>
                 <br>
                <div class="sell">
                    <mt-button type="primary" size="small">立即购买</mt-button>
-                   <mt-button type="danger" size="small" @click="ballFlag?seenBall = !seenBall:seenBall">加入购物车</mt-button>
+                   <mt-button type="danger" size="small" @click="addShoppingCart">加入购物车</mt-button>
                </div>
             </div>
         </div>
@@ -89,6 +89,18 @@
             //    console.log(that.scrollTop,that.firstScrollTop ,that.ballPosition);
             // })
         },
+        watch: {
+            count: {
+                handler: function (val) {
+                    if (val > this.GoodsInfo.stock_quantity) {
+                        this.count = this.GoodsInfo.stock_quantity;
+                    }
+                    if (val < 1) {
+                        this.count = 1;
+                    }
+                }
+            }
+        },
         methods: {
             getBanner () {
                 this.$http.get('api/getthumimages/' + this.id).then(result => {
@@ -103,6 +115,7 @@
                 this.$http.get('api/goods/getinfo/' + this.id).then(result => {
                     if (result.body.status === 0) {
                         this.GoodsInfo = result.body.message[0];
+                        mui('.mui-numbox').numbox().setOption('max',this.GoodsInfo.stock_quantity);
                     } else {
                         Toast('商品详情加载失败');
                     }
@@ -135,6 +148,19 @@
             },
             afterEnter () {
                 this.seenBall = false;
+            },
+
+            //添加购物车
+            addShoppingCart () {
+                this.ballFlag?this.seenBall = !this.seenBall:this.seenBall;
+                let cartData = {
+                    id: this.id,
+                    price: this.GoodsInfo.sell_price,
+                    count: this.count,
+                    totalCount: this.GoodsInfo.stock_quantity,
+                    flag: true
+                };
+                this.$store.commit('addCart',cartData);
             }
         }
     }

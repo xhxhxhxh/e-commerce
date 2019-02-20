@@ -46,7 +46,7 @@
         methods: {
             getBanner () {
                 this.$http.get('api/getlunbo').then(result => {
-                    console.log(result)
+                    // console.log(result)
                     if (result.body.status === 0) {
                         this.bannerList = result.body.message;
                     } else {
